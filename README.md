@@ -1,73 +1,124 @@
-# React + TypeScript + Vite
+# AlgoNote (algo-review-system)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+알고리즘 문제 풀이를 단순 기록하는 것을 넘어,
+**회상 기반 복습을 통해 장기 기억으로 만드는 학습 시스템**입니다.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🧠 프로젝트 배경
 
-## React Compiler
+알고리즘 문제를 반복해서 풀어도
+시간이 지나면 다시 풀지 못하는 경험이 많았습니다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+기존의 풀이 기록 방식은
+코드만 남고 “왜 이렇게 풀었는지”는 남지 않는다는 문제가 있었습니다.
 
-## Expanding the ESLint configuration
+이 프로젝트는 이러한 문제를 해결하기 위해
+단순 기록이 아닌 **복습과 회상을 중심으로 한 학습 구조**를 목표로 제작되었습니다.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+---
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🚀 핵심 기능
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### 1. 문제 기록
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- 문제 제목 / 플랫폼 / 번호 / 링크 저장
+- 풀이 코드 저장
+- 알고리즘 분류 태그 입력
+- 핵심 아이디어 및 막힌 포인트 기록
+
+### 2. 복습을 위한 구조화된 데이터
+
+- 단순 코드가 아닌 학습 중심 데이터 저장
+  - 핵심 아이디어
+  - 막힌 이유
+  - 복습 힌트
+
+### 3. 복습 시스템
+
+- `new / review / mastered` 상태 관리
+- 복습 결과 기록
+  - 기억남 / 애매함 / 모르겠음
+
+- 복습 히스토리 자동 저장
+
+### 4. 문제 상세 페이지
+
+- 풀이 과정 및 사고 흐름 확인
+- 복습 기록 추적 가능
+
+---
+
+## 🏗️ 기술 스택
+
+- **Frontend**
+  - React
+  - TypeScript
+  - Vite
+
+- **State Management**
+  - Zustand
+
+- **Storage**
+  - localStorage 기반 데이터 유지
+
+---
+
+## 📁 프로젝트 구조
+
+```bash
+src/
+├─ pages/
+│  ├─ DashboardPage
+│  ├─ AddProblemPage
+│  ├─ ProblemsPage
+│  ├─ ProblemDetailPage
+│  └─ ReviewPage
+│
+├─ store/
+│  └─ useProblemStore.ts
+│
+├─ types/
+│  └─ problem.ts
+│
+├─ utils/
+│  └─ storage.ts
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 🔄 데이터 흐름
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. 문제 등록
+2. 상태 관리 (new)
+3. 복습 진행
+4. 결과 반영 (review / mastered)
+5. 복습 히스토리 축적
+
+---
+
+## 💡 설계 포인트
+
+- 단순 CRUD가 아닌 **학습 흐름 중심 설계**
+- “문제 풀이”가 아닌 **문제 회상 구조**에 초점
+- 상태 기반 복습 시스템 (state-driven learning)
+- 사용자의 사고 과정을 데이터로 남기는 구조
+
+---
+
+## 📌 향후 개선 예정
+
+- [ ] 문제 수정 기능
+- [ ] 복습 우선순위 알고리즘 (망각 곡선 기반)
+- [ ] 코드 하이라이팅
+- [ ] UI/UX 개선 (카드, 대시보드 시각화)
+- [ ] GPT 기반 요약 및 복습 질문 생성
+- [ ] GitHub 연동 (풀이 코드 자동 업로드)
+
+---
+
+## ✨ 프로젝트 목적
+
+이 프로젝트는 단순한 알고리즘 풀이 저장소가 아니라,
+
+👉 **“풀이를 기억으로 바꾸는 학습 도구”**를 만드는 것을 목표로 합니다.

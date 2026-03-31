@@ -1,287 +1,234 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useProblemStore } from "../store/useProblemStore";
-import type {
-  ProblemLanguage,
-  ProblemRuntime,
-  ReviewResult,
-} from "../types/problem";
+import { useProblemStore } from "@/entities/problem/model/problemStore";
 
-function getLanguageLabel(language: ProblemLanguage) {
-  switch (language) {
-    case "javascript":
-      return "JavaScript";
-    case "typescript":
-      return "TypeScript";
-    case "python":
-      return "Python";
-    case "java":
-      return "Java";
-    default:
-      return language;
-  }
-}
-
-function getRuntimeLabel(runtime: ProblemRuntime) {
-  switch (runtime) {
-    case "nodejs":
-      return "Node.js";
-    default:
-      return runtime;
-  }
-}
-
-function getReviewResultLabel(result: ReviewResult) {
-  switch (result) {
-    case "remembered":
-      return "기억남";
-    case "vague":
-      return "애매함";
-    case "forgot":
-      return "모르겠음";
-    default:
-      return result;
-  }
+function formatDate(value: string) {
+  return new Date(value).toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
 export default function ProblemDetailPage() {
-  const { id } = useParams();
+  const { id = "" } = useParams();
   const navigate = useNavigate();
 
-  const records = useProblemStore((state) => state.records);
-  const removeRecord = useProblemStore((state) => state.removeRecord);
+  const problem = useProblemStore((state) => state.getProblemById(id));
+  const deleteProblem = useProblemStore((state) => state.deleteProblem);
 
-  const record = records.find((item) => item.id === id);
-
-  if (!record) {
+  if (!problem) {
     return (
-      <div style={{ padding: "24px" }}>
-        <h1>문제를 찾을 수 없어</h1>
-        <p style={{ marginTop: "12px" }}>삭제되었거나 잘못된 경로일 수 있어.</p>
+      <section className="rounded-[28px] border border-line-100 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+        <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
+          Problem Detail
+        </p>
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink-950">
+          문제를 찾을 수 없습니다
+        </h1>
+        <p className="mt-3 text-sm leading-6 text-ink-500">
+          삭제되었거나 잘못된 주소로 접근했을 수 있어요.
+        </p>
         <Link
           to="/problems"
-          style={{ display: "inline-block", marginTop: "16px" }}
+          className="mt-5 inline-flex rounded-full border border-line-200 px-4 py-2 text-sm font-medium text-ink-700 transition hover:border-accent-500 hover:text-accent-600"
         >
           목록으로 돌아가기
         </Link>
-      </div>
+      </section>
     );
   }
 
   const handleDelete = () => {
-    const confirmed = window.confirm("이 문제를 삭제할까?");
-
+    const confirmed = window.confirm("정말 삭제할까요?");
     if (!confirmed) return;
 
-    removeRecord(record.id);
+    deleteProblem(id);
     navigate("/problems");
   };
 
   return (
-    <div style={{ padding: "24px", maxWidth: "960px" }}>
-      <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-        <Link to="/problems">← 목록으로</Link>
+    <section className="space-y-6">
+      <div className="rounded-[32px] bg-ink-950 px-6 py-7 text-white shadow-[0_24px_70px_rgba(15,23,42,0.18)] sm:px-8">
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+          <div>
+            <p className="text-sm font-medium tracking-[0.18em] text-teal-200 uppercase">
+              Problem Detail
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+              {problem.title}
+            </h1>
+            <p className="mt-3 text-sm leading-6 text-slate-300">
+              {problem.platform}
+              {problem.problemNumber ? ` · ${problem.problemNumber}` : ""}
+              {problem.language ? ` · ${problem.language}` : ""}
+            </p>
+
+            <div className="mt-4 flex flex-wrap gap-2">
+              {problem.algorithms.map((algorithm) => (
+                <span
+                  key={algorithm}
+                  className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-teal-100"
+                >
+                  {algorithm}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            <Link
+              to="/problems"
+              className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+            >
+              목록
+            </Link>
+            <Link
+              to={`/problems/${id}/edit`}
+              className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-ink-950 transition hover:bg-teal-50"
+            >
+              수정
+            </Link>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="rounded-full bg-rose-500 px-4 py-2 text-sm font-semibold text-white transition hover:bg-rose-600"
+            >
+              삭제
+            </button>
+          </div>
+        </div>
       </div>
 
-      <div style={{ marginTop: "20px" }}>
-        <h1 style={{ margin: 0 }}>{record.title}</h1>
+      <div className="grid gap-4 md:grid-cols-3">
+        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+          <p className="text-sm text-ink-500">상태</p>
+          <p className="mt-2 text-2xl font-semibold tracking-tight text-ink-950">
+            {problem.status}
+          </p>
+        </div>
 
-        <p style={{ marginTop: "12px", color: "#666" }}>
-          {record.platform}
-          {record.problemNumber ? ` · ${record.problemNumber}` : ""}
-          {record.language ? ` · ${getLanguageLabel(record.language)}` : ""}
-          {record.runtimes.length > 0
-            ? ` · ${record.runtimes.map(getRuntimeLabel).join(", ")}`
-            : ""}
-        </p>
+        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+          <p className="text-sm text-ink-500">복습 횟수</p>
+          <p className="mt-2 text-2xl font-semibold tracking-tight text-ink-950">
+            {problem.reviewCount}
+          </p>
+        </div>
 
-        {record.problemUrl && (
-          <p style={{ marginTop: "8px" }}>
-            <a href={record.problemUrl} target="_blank" rel="noreferrer">
-              문제 링크 열기
+        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+          <p className="text-sm text-ink-500">문제 링크</p>
+          {problem.problemUrl ? (
+            <a
+              href={problem.problemUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-2 inline-flex text-sm font-medium text-accent-600 hover:text-accent-500"
+            >
+              원문 보기
             </a>
-          </p>
-        )}
+          ) : (
+            <p className="mt-2 text-sm text-ink-500">등록된 링크 없음</p>
+          )}
+        </div>
       </div>
 
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "16px",
-          padding: "20px",
-          marginTop: "24px",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>기본 정보</h2>
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="space-y-6">
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+              핵심 아이디어
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-ink-700">
+              {problem.summary || "아직 정리된 핵심 아이디어가 없어요."}
+            </p>
+          </section>
 
-        <p>
-          <strong>상태:</strong> {record.status}
-        </p>
-        <p>
-          <strong>복습 횟수:</strong> {record.reviewCount}
-        </p>
-        <p>
-          <strong>생성일:</strong> {new Date(record.createdAt).toLocaleString()}
-        </p>
-        <p>
-          <strong>수정일:</strong> {new Date(record.updatedAt).toLocaleString()}
-        </p>
-        {record.lastReviewedAt && (
-          <p>
-            <strong>마지막 복습일:</strong>{" "}
-            {new Date(record.lastReviewedAt).toLocaleString()}
-          </p>
-        )}
-      </section>
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+              막힌 포인트
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-ink-700">
+              {problem.blockedReason || "기록된 막힘 포인트가 없어요."}
+            </p>
+          </section>
 
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "16px",
-          padding: "20px",
-          marginTop: "16px",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>알고리즘 분류</h2>
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+              복습 힌트
+            </h2>
+            <p className="mt-3 text-sm leading-7 text-ink-700">
+              {problem.reviewHint || "복습 힌트가 아직 없어요."}
+            </p>
+          </section>
 
-        {record.algorithms.length === 0 ? (
-          <p>아직 입력된 분류가 없어.</p>
-        ) : (
-          <div style={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-            {record.algorithms.map((algorithm) => (
-              <span
-                key={algorithm}
-                style={{
-                  padding: "6px 10px",
-                  borderRadius: "999px",
-                  background: "#f2f2f2",
-                  fontSize: "14px",
-                }}
-              >
-                {algorithm}
-              </span>
-            ))}
-          </div>
-        )}
-      </section>
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950">코드</h2>
+            <pre className="mt-4 overflow-x-auto rounded-[24px] bg-ink-950 p-5 text-sm leading-7 text-slate-100">
+              <code>{problem.code || "// 아직 저장된 코드가 없습니다."}</code>
+            </pre>
+          </section>
+        </div>
 
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "16px",
-          padding: "20px",
-          marginTop: "16px",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>핵심 아이디어</h2>
-        <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
-          {record.summary || "아직 작성되지 않았어."}
-        </p>
-      </section>
-
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "16px",
-          padding: "20px",
-          marginTop: "16px",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>막힌 포인트</h2>
-        <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
-          {record.blockedReason || "아직 작성되지 않았어."}
-        </p>
-      </section>
-
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "16px",
-          padding: "20px",
-          marginTop: "16px",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>복습 힌트</h2>
-        <p style={{ whiteSpace: "pre-wrap", lineHeight: 1.6 }}>
-          {record.reviewHint || "아직 작성되지 않았어."}
-        </p>
-      </section>
-
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "16px",
-          padding: "20px",
-          marginTop: "16px",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>풀이 코드</h2>
-        <pre
-          style={{
-            margin: 0,
-            padding: "16px",
-            background: "#f7f7f7",
-            borderRadius: "12px",
-            overflowX: "auto",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
-            fontFamily: "monospace",
-            lineHeight: 1.5,
-          }}
-        >
-          {record.code || "코드가 없어."}
-        </pre>
-      </section>
-
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: "16px",
-          padding: "20px",
-          marginTop: "16px",
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>복습 히스토리</h2>
-
-        {record.reviewHistory.length === 0 ? (
-          <p>아직 복습 기록이 없어.</p>
-        ) : (
-          <div style={{ display: "grid", gap: "12px" }}>
-            {record.reviewHistory.map((history) => (
-              <div
-                key={history.id}
-                style={{
-                  padding: "12px",
-                  border: "1px solid #eee",
-                  borderRadius: "12px",
-                }}
-              >
-                <p style={{ margin: 0 }}>
-                  <strong>결과:</strong> {getReviewResultLabel(history.result)}
-                </p>
-                <p style={{ margin: "8px 0 0 0", color: "#666" }}>
-                  {new Date(history.reviewedAt).toLocaleString()}
-                </p>
+        <aside className="space-y-6">
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+              메타 정보
+            </h2>
+            <dl className="mt-4 space-y-4 text-sm">
+              <div>
+                <dt className="text-ink-500">언어</dt>
+                <dd className="mt-1 font-medium text-ink-950">
+                  {problem.language || "미입력"}
+                </dd>
               </div>
-            ))}
-          </div>
-        )}
-      </section>
+              <div>
+                <dt className="text-ink-500">런타임</dt>
+                <dd className="mt-1 font-medium text-ink-950">
+                  {problem.runtimes.length > 0
+                    ? problem.runtimes.join(", ")
+                    : "미입력"}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-ink-500">생성일</dt>
+                <dd className="mt-1 font-medium text-ink-950">
+                  {formatDate(problem.createdAt)}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-ink-500">수정일</dt>
+                <dd className="mt-1 font-medium text-ink-950">
+                  {formatDate(problem.updatedAt)}
+                </dd>
+              </div>
+            </dl>
+          </section>
 
-      <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
-        <button
-          type="button"
-          onClick={handleDelete}
-          style={{
-            padding: "12px 20px",
-            border: "1px solid #ddd",
-            borderRadius: "10px",
-            background: "white",
-            cursor: "pointer",
-          }}
-        >
-          삭제하기
-        </button>
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+              최근 복습 기록
+            </h2>
+            {problem.reviewHistory.length === 0 ? (
+              <p className="mt-3 text-sm leading-6 text-ink-500">
+                아직 복습 기록이 없습니다.
+              </p>
+            ) : (
+              <ul className="mt-4 space-y-3">
+                {problem.reviewHistory.slice(0, 5).map((item) => (
+                  <li
+                    key={item.id}
+                    className="rounded-2xl bg-surface-50 px-4 py-3 text-sm"
+                  >
+                    <p className="font-medium text-ink-950">{item.difficulty}</p>
+                    <p className="mt-1 text-ink-500">
+                      {formatDate(item.reviewedAt)}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </aside>
       </div>
-    </div>
+    </section>
   );
 }

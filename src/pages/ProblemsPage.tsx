@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useProblemStore } from "../store/useProblemStore";
+import { useProblemStore } from "@/entities/problem/model/problemStore";
 
 function getLanguageLabel(language: string) {
   switch (language) {
@@ -26,77 +26,90 @@ function getRuntimeLabel(runtime: string) {
 }
 
 export default function ProblemsPage() {
-  const records = useProblemStore((state) => state.records);
+  const problems = useProblemStore((state) => state.problems);
 
   return (
-    <div style={{ padding: "24px" }}>
-      <h1>문제 목록</h1>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
+            Problems
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink-950">
+            문제 목록
+          </h1>
+        </div>
 
-      <div style={{ marginTop: "16px" }}>
-        <Link to="/add">+ 새 문제 등록</Link>
+        <Link
+          to="/add"
+          className="inline-flex rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-accent-600"
+        >
+          + 새 문제 등록
+        </Link>
       </div>
 
-      {records.length === 0 ? (
-        <p style={{ marginTop: "24px" }}>아직 등록된 문제가 없어.</p>
+      {problems.length === 0 ? (
+        <div className="rounded-[28px] border border-dashed border-line-200 bg-white/70 p-10 text-center backdrop-blur">
+          <p className="text-base text-ink-500">아직 등록된 문제가 없어.</p>
+        </div>
       ) : (
-        <div style={{ display: "grid", gap: "16px", marginTop: "24px" }}>
-          {records.map((record) => (
+        <div className="grid gap-5">
+          {problems.map((record) => (
             <article
               key={record.id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: "16px",
-                padding: "20px",
-              }}
+              className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]"
             >
-              <h2 style={{ margin: 0 }}>
-                <Link to={`/problems/${record.id}`}>{record.title}</Link>
-              </h2>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h2 className="text-xl font-semibold tracking-tight text-ink-950">
+                    <Link
+                      to={`/problems/${record.id}`}
+                      className="transition hover:text-accent-600"
+                    >
+                      {record.title}
+                    </Link>
+                  </h2>
 
-              <p style={{ marginTop: "8px", color: "#666" }}>
-                {record.platform}
-                {record.problemNumber ? ` · ${record.problemNumber}` : ""}
-                {record.language
-                  ? ` · ${getLanguageLabel(record.language)}`
-                  : ""}
-                {record.runtimes.length > 0
-                  ? ` · ${record.runtimes.map(getRuntimeLabel).join(", ")}`
-                  : ""}
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "8px",
-                  flexWrap: "wrap",
-                  marginTop: "12px",
-                }}
-              >
+                  <p className="mt-2 text-sm text-ink-500">
+                    {record.platform}
+                    {record.problemNumber ? ` · ${record.problemNumber}` : ""}
+                    {record.language
+                      ? ` · ${getLanguageLabel(record.language)}`
+                      : ""}
+                    {record.runtimes.length > 0
+                      ? ` · ${record.runtimes.map(getRuntimeLabel).join(", ")}`
+                      : ""}
+                  </p>
+                </div>
+
+                <div className="rounded-full bg-surface-50 px-4 py-2 text-sm font-medium text-ink-700">
+                  상태: {record.status}
+                </div>
+              </div>
+
+              <div className="mt-4 flex flex-wrap gap-2">
                 {record.algorithms.map((algorithm) => (
                   <span
                     key={algorithm}
-                    style={{
-                      padding: "6px 10px",
-                      borderRadius: "999px",
-                      background: "#f2f2f2",
-                      fontSize: "14px",
-                    }}
+                    className="rounded-full bg-accent-50 px-3 py-1.5 text-xs font-medium text-accent-600"
                   >
                     {algorithm}
                   </span>
                 ))}
               </div>
 
-              <p style={{ marginTop: "12px" }}>
-                <strong>상태:</strong> {record.status}
-              </p>
-
-              <p style={{ marginTop: "8px" }}>
-                <strong>핵심 아이디어:</strong>{" "}
+              <p className="mt-5 text-sm leading-6 text-ink-700">
+                <span className="font-semibold text-ink-950">핵심 아이디어:</span>{" "}
                 {record.summary || "아직 작성되지 않음"}
               </p>
 
-              <div style={{ marginTop: "16px" }}>
-                <Link to={`/problems/${record.id}`}>상세 보기</Link>
+              <div className="mt-5">
+                <Link
+                  to={`/problems/${record.id}`}
+                  className="inline-flex rounded-full border border-line-200 px-4 py-2 text-sm font-medium text-ink-700 transition hover:border-accent-500 hover:text-accent-600"
+                >
+                  상세 보기
+                </Link>
               </div>
             </article>
           ))}
