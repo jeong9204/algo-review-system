@@ -18,19 +18,19 @@ export default function ProblemDetailPage() {
 
   if (!problem) {
     return (
-      <section className="rounded-[28px] border border-line-100 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
+      <section className="rounded-[28px] border border-line-100 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Problem Detail
         </p>
-        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink-950">
+        <h1 className="mt-2 text-2xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           문제를 찾을 수 없습니다
         </h1>
-        <p className="mt-3 text-sm leading-6 text-ink-500">
+        <p className="mt-3 text-sm leading-6 text-ink-500 dark:text-slate-300">
           삭제되었거나 잘못된 주소로 접근했을 수 있어요.
         </p>
         <Link
           to="/problems"
-          className="mt-5 inline-flex rounded-full border border-line-200 px-4 py-2 text-sm font-medium text-ink-700 transition hover:border-accent-500 hover:text-accent-600"
+          className="mt-5 inline-flex rounded-full border border-line-200 px-4 py-2 text-sm font-medium text-ink-700 transition hover:border-accent-500 hover:text-accent-600 dark:border-slate-700 dark:text-slate-200 dark:hover:border-accent-500 dark:hover:text-teal-300"
         >
           목록으로 돌아가기
         </Link>
@@ -48,16 +48,16 @@ export default function ProblemDetailPage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-ink-950 px-6 py-7 text-white shadow-[0_24px_70px_rgba(15,23,42,0.18)] sm:px-8">
+      <div className="rounded-[32px] border border-line-100 bg-white px-6 py-7 text-ink-950 shadow-[0_24px_70px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-ink-950 dark:text-white dark:shadow-[0_24px_70px_rgba(2,6,23,0.38)] sm:px-8">
         <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
           <div>
-            <p className="text-sm font-medium tracking-[0.18em] text-teal-200 uppercase">
+            <p className="text-sm font-medium tracking-[0.18em] text-accent-600 dark:text-teal-200 uppercase">
               Problem Detail
             </p>
-            <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink-950 dark:text-white sm:text-4xl">
               {problem.title}
             </h1>
-            <p className="mt-3 text-sm leading-6 text-slate-300">
+            <p className="mt-3 text-sm leading-6 text-ink-500 dark:text-slate-300">
               {problem.platform}
               {problem.problemNumber ? ` · ${problem.problemNumber}` : ""}
               {problem.language ? ` · ${problem.language}` : ""}
@@ -67,7 +67,7 @@ export default function ProblemDetailPage() {
               {problem.algorithms.map((algorithm) => (
                 <span
                   key={algorithm}
-                  className="rounded-full bg-white/10 px-3 py-1.5 text-xs font-medium text-teal-100"
+                  className="rounded-full bg-accent-50 px-3 py-1.5 text-xs font-medium text-accent-600 dark:bg-white/10 dark:text-teal-100"
                 >
                   {algorithm}
                 </span>
@@ -78,13 +78,13 @@ export default function ProblemDetailPage() {
           <div className="flex flex-wrap gap-3">
             <Link
               to="/problems"
-              className="rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white transition hover:bg-white/10"
+              className="rounded-full border border-line-200 px-4 py-2 text-sm font-medium text-ink-700 transition hover:border-accent-500 hover:text-accent-600 dark:border-white/15 dark:text-white dark:hover:bg-white/10 dark:hover:text-white"
             >
               목록
             </Link>
             <Link
               to={`/problems/${id}/edit`}
-              className="rounded-full bg-white px-4 py-2 text-sm font-semibold text-ink-950 transition hover:bg-teal-50"
+              className="rounded-full bg-ink-950 px-4 py-2 text-sm font-semibold text-white transition hover:bg-accent-600 dark:bg-white dark:text-ink-950 dark:hover:bg-teal-50"
             >
               수정
             </Link>
@@ -100,22 +100,22 @@ export default function ProblemDetailPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-          <p className="text-sm text-ink-500">상태</p>
-          <p className="mt-2 text-2xl font-semibold tracking-tight text-ink-950">
+        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+          <p className="text-sm text-ink-500 dark:text-slate-400">상태</p>
+          <p className="mt-2 text-2xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
             {problem.status}
           </p>
         </div>
 
-        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-          <p className="text-sm text-ink-500">복습 횟수</p>
-          <p className="mt-2 text-2xl font-semibold tracking-tight text-ink-950">
+        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+          <p className="text-sm text-ink-500 dark:text-slate-400">복습 횟수</p>
+          <p className="mt-2 text-2xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
             {problem.reviewCount}
           </p>
         </div>
 
-        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-          <p className="text-sm text-ink-500">문제 링크</p>
+        <div className="rounded-[24px] border border-line-100 bg-white p-5 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+          <p className="text-sm text-ink-500 dark:text-slate-400">문제 링크</p>
           {problem.problemUrl ? (
             <a
               href={problem.problemUrl}
@@ -126,42 +126,42 @@ export default function ProblemDetailPage() {
               원문 보기
             </a>
           ) : (
-            <p className="mt-2 text-sm text-ink-500">등록된 링크 없음</p>
+            <p className="mt-2 text-sm text-ink-500 dark:text-slate-300">등록된 링크 없음</p>
           )}
         </div>
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-6">
-          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               핵심 아이디어
             </h2>
-            <p className="mt-3 text-sm leading-7 text-ink-700">
+            <p className="mt-3 text-sm leading-7 text-ink-700 dark:text-slate-300">
               {problem.summary || "아직 정리된 핵심 아이디어가 없어요."}
             </p>
           </section>
 
-          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               막힌 포인트
             </h2>
-            <p className="mt-3 text-sm leading-7 text-ink-700">
+            <p className="mt-3 text-sm leading-7 text-ink-700 dark:text-slate-300">
               {problem.blockedReason || "기록된 막힘 포인트가 없어요."}
             </p>
           </section>
 
-          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               복습 힌트
             </h2>
-            <p className="mt-3 text-sm leading-7 text-ink-700">
+            <p className="mt-3 text-sm leading-7 text-ink-700 dark:text-slate-300">
               {problem.reviewHint || "복습 힌트가 아직 없어요."}
             </p>
           </section>
 
-          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-            <h2 className="text-lg font-semibold tracking-tight text-ink-950">코드</h2>
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">코드</h2>
             <pre className="mt-4 overflow-x-auto rounded-[24px] bg-ink-950 p-5 text-sm leading-7 text-slate-100">
               <code>{problem.code || "// 아직 저장된 코드가 없습니다."}</code>
             </pre>
@@ -169,46 +169,46 @@ export default function ProblemDetailPage() {
         </div>
 
         <aside className="space-y-6">
-          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               메타 정보
             </h2>
             <dl className="mt-4 space-y-4 text-sm">
               <div>
-                <dt className="text-ink-500">언어</dt>
-                <dd className="mt-1 font-medium text-ink-950">
+                <dt className="text-ink-500 dark:text-slate-400">언어</dt>
+                <dd className="mt-1 font-medium text-ink-950 dark:text-slate-100">
                   {problem.language || "미입력"}
                 </dd>
               </div>
               <div>
-                <dt className="text-ink-500">런타임</dt>
-                <dd className="mt-1 font-medium text-ink-950">
+                <dt className="text-ink-500 dark:text-slate-400">런타임</dt>
+                <dd className="mt-1 font-medium text-ink-950 dark:text-slate-100">
                   {problem.runtimes.length > 0
                     ? problem.runtimes.join(", ")
                     : "미입력"}
                 </dd>
               </div>
               <div>
-                <dt className="text-ink-500">생성일</dt>
-                <dd className="mt-1 font-medium text-ink-950">
+                <dt className="text-ink-500 dark:text-slate-400">생성일</dt>
+                <dd className="mt-1 font-medium text-ink-950 dark:text-slate-100">
                   {formatDate(problem.createdAt)}
                 </dd>
               </div>
               <div>
-                <dt className="text-ink-500">수정일</dt>
-                <dd className="mt-1 font-medium text-ink-950">
+                <dt className="text-ink-500 dark:text-slate-400">수정일</dt>
+                <dd className="mt-1 font-medium text-ink-950 dark:text-slate-100">
                   {formatDate(problem.updatedAt)}
                 </dd>
               </div>
             </dl>
           </section>
 
-          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]">
-            <h2 className="text-lg font-semibold tracking-tight text-ink-950">
+          <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]">
+            <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               최근 복습 기록
             </h2>
             {problem.reviewHistory.length === 0 ? (
-              <p className="mt-3 text-sm leading-6 text-ink-500">
+              <p className="mt-3 text-sm leading-6 text-ink-500 dark:text-slate-300">
                 아직 복습 기록이 없습니다.
               </p>
             ) : (
@@ -216,10 +216,10 @@ export default function ProblemDetailPage() {
                 {problem.reviewHistory.slice(0, 5).map((item) => (
                   <li
                     key={item.id}
-                    className="rounded-2xl bg-surface-50 px-4 py-3 text-sm"
+                    className="rounded-2xl bg-surface-50 px-4 py-3 text-sm dark:bg-slate-800"
                   >
-                    <p className="font-medium text-ink-950">{item.difficulty}</p>
-                    <p className="mt-1 text-ink-500">
+                    <p className="font-medium text-ink-950 dark:text-slate-100">{item.difficulty}</p>
+                    <p className="mt-1 text-ink-500 dark:text-slate-400">
                       {formatDate(item.reviewedAt)}
                     </p>
                   </li>

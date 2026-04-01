@@ -18,8 +18,8 @@ export default function ProblemFormPage() {
 
   if (isEditMode && !targetProblem) {
     return (
-      <section className="rounded-[28px] border border-line-100 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
-        <h1 className="text-2xl font-semibold tracking-tight text-ink-950">
+      <section className="rounded-[28px] border border-line-100 bg-white p-8 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+        <h1 className="text-2xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           문제를 찾을 수 없습니다
         </h1>
         <Link
@@ -34,14 +34,14 @@ export default function ProblemFormPage() {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-[32px] bg-ink-950 px-6 py-7 text-white shadow-[0_24px_70px_rgba(15,23,42,0.18)] sm:px-8">
-        <p className="text-sm font-medium tracking-[0.18em] text-teal-200 uppercase">
+      <div className="rounded-[32px] border border-line-100 bg-white px-6 py-7 text-ink-950 shadow-[0_24px_70px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-ink-950 dark:text-white dark:shadow-[0_24px_70px_rgba(2,6,23,0.38)] sm:px-8">
+        <p className="text-sm font-medium tracking-[0.18em] text-accent-600 dark:text-teal-200 uppercase">
           Problem Form
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink-950 dark:text-white sm:text-4xl">
           {isEditMode ? "복습용 문제 수정" : "복습용 문제 등록"}
         </h1>
-        <p className="mt-3 max-w-2xl text-sm leading-6 text-slate-300">
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-500 dark:text-slate-300">
           풀이 기록을 남기는 것보다, 나중에 스스로 다시 떠올릴 수 있게 정리하는
           것이 더 중요합니다. 문제 맥락, 막힌 포인트, 복습 힌트를 함께
           남겨두세요.

@@ -14,6 +14,13 @@
     color: #0f172a;
   }
 
+  html.dark {
+    background:
+      radial-gradient(circle at top, rgba(13, 148, 136, 0.16), transparent 28%),
+      linear-gradient(180deg, #09111f 0%, #0f172a 100%);
+    color: #e5eef8;
+  }
+
   body {
     margin: 0;
     min-width: 320px;
@@ -45,5 +52,9 @@
 
   #root {
     min-height: 100vh;
+  }
+
+  ::selection {
+    background: rgba(13, 148, 136, 0.24);
   }
 }

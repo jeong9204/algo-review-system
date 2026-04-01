@@ -10,11 +10,11 @@ export default function ReviewPage() {
 
   if (reviewTargets.length === 0) {
     return (
-      <div className="rounded-[28px] border border-dashed border-line-200 bg-white/70 p-10 text-center backdrop-blur">
-        <h1 className="text-3xl font-semibold tracking-tight text-ink-950">
+      <div className="rounded-[28px] border border-dashed border-line-200 bg-white/70 p-10 text-center backdrop-blur dark:border-slate-700 dark:bg-slate-900/70">
+        <h1 className="text-3xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           복습하기
         </h1>
-        <p className="mt-4 text-sm text-ink-500">지금 복습할 문제가 없어.</p>
+        <p className="mt-4 text-sm text-ink-500 dark:text-slate-300">지금 복습할 문제가 없어.</p>
       </div>
     );
   }
@@ -25,10 +25,10 @@ export default function ReviewPage() {
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Recall Check
         </p>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink-950">
+        <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           복습하기
         </h1>
-        <p className="mt-2 text-sm leading-6 text-ink-500">
+        <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           정답을 다시 보는 대신, 문제를 보고 핵심 아이디어와 구현 흐름이 얼마나
           떠오르는지 먼저 점검해보세요.
         </p>
@@ -38,14 +38,14 @@ export default function ReviewPage() {
         {reviewTargets.map((record) => (
           <article
             key={record.id}
-            className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)]"
+            className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_18px_50px_rgba(15,23,42,0.06)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_18px_50px_rgba(0,0,0,0.3)]"
           >
-            <h2 className="text-xl font-semibold tracking-tight text-ink-950">
+            <h2 className="text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               {record.title}
             </h2>
 
-            <p className="mt-3 text-sm leading-6 text-ink-700">
-              <span className="font-semibold text-ink-950">복습 힌트:</span>{" "}
+            <p className="mt-3 text-sm leading-6 text-ink-700 dark:text-slate-300">
+              <span className="font-semibold text-ink-950 dark:text-slate-50">복습 힌트:</span>{" "}
               {record.reviewHint || "힌트 없음"}
             </p>
 

@@ -165,35 +165,35 @@ export default function ProblemForm({
       onSubmit={handleSubmit}
       className="w-full space-y-6"
     >
-      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Problem Context
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950">
+        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           문제 기본 정보
         </h2>
-        <p className="mt-2 text-sm leading-6 text-ink-500">
+        <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           나중에 다시 봤을 때 어떤 문제였는지 빠르게 떠올릴 수 있도록 기본
           맥락을 남겨주세요.
         </p>
 
         <div className="mt-6">
-          <label className="block text-sm font-semibold text-ink-700">문제 제목</label>
+          <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">문제 제목</label>
           <input
             value={form.title}
             onChange={(e) => handleChange("title", e.target.value)}
             placeholder="예: DFS와 BFS"
-            className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+            className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
           />
         </div>
 
         <div className="mt-4 grid gap-4 md:grid-cols-3">
           <div>
-            <label className="block text-sm font-semibold text-ink-700">플랫폼</label>
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">플랫폼</label>
             <select
               value={form.platform}
               onChange={(e) => handlePlatformChange(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:bg-slate-800"
             >
               {PLATFORM_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -204,46 +204,46 @@ export default function ProblemForm({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-ink-700">문제 번호</label>
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">문제 번호</label>
             <input
               value={form.problemNumber}
               onChange={(e) => handleChange("problemNumber", e.target.value)}
               placeholder="예: 1260"
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-ink-700">문제 링크</label>
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">문제 링크</label>
             <input
               value={form.problemUrl}
               onChange={(e) => handleChange("problemUrl", e.target.value)}
               placeholder="https://..."
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
           </div>
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Recall Material
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950">
+        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           회상에 필요한 단서
         </h2>
-        <p className="mt-2 text-sm leading-6 text-ink-500">
+        <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           언어, 런타임, 알고리즘 분류와 함께 어떤 생각으로 풀었는지 복습 재료를
           남겨두세요.
         </p>
 
         <div className="mt-6 grid gap-4 md:grid-cols-3">
           <div>
-            <label className="block text-sm font-semibold text-ink-700">언어</label>
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">언어</label>
             <select
               value={form.language}
               onChange={(e) => handleLanguageChange(e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:bg-slate-800"
             >
               {LANGUAGE_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -254,7 +254,7 @@ export default function ProblemForm({
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-ink-700">런타임</label>
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">런타임</label>
             <input
               value={form.runtimes.join(", ")}
               onChange={(e) =>
@@ -267,17 +267,17 @@ export default function ProblemForm({
                 )
               }
               placeholder="예: Node.js"
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
             {form.platform === "baekjoon" && form.language === "javascript" ? (
-              <p className="mt-2 text-xs text-ink-500">
+              <p className="mt-2 text-xs text-ink-500 dark:text-slate-400">
                 백준에서 JavaScript를 선택하면 런타임은 보통 Node.js로 사용됩니다.
               </p>
             ) : null}
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-ink-700">
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">
               알고리즘 분류
             </label>
             <input
@@ -292,62 +292,62 @@ export default function ProblemForm({
                 )
               }
               placeholder="예: BFS, 그래프"
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
           </div>
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Review Notes
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950">
+        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           복습 메모
         </h2>
-        <p className="mt-2 text-sm leading-6 text-ink-500">
+        <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           다음 복습 때 바로 떠올릴 수 있도록 핵심 개념과 막혔던 지점을 짧게
           정리해두세요.
         </p>
 
         <div className="mt-6 space-y-6">
           <div>
-            <label className="block text-sm font-semibold text-ink-700">
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">
               핵심 아이디어
             </label>
             <textarea
               rows={4}
               value={form.summary}
               onChange={(e) => handleChange("summary", e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-ink-700">
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">
               막힌 포인트
             </label>
             <textarea
               rows={4}
               value={form.blockedReason}
               onChange={(e) => handleChange("blockedReason", e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-ink-700">
+            <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">
               복습 힌트
             </label>
             <textarea
               rows={4}
               value={form.reviewHint}
               onChange={(e) => handleChange("reviewHint", e.target.value)}
-              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50"
+              className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
           </div>
 
-          <label className="block rounded-2xl border border-line-200 bg-surface-50 px-4 py-4">
+          <label className="block rounded-2xl border border-line-200 bg-surface-50 px-4 py-4 dark:border-slate-700 dark:bg-slate-800">
             <div className="flex items-start gap-3">
               <input
                 type="checkbox"
@@ -358,10 +358,10 @@ export default function ProblemForm({
                 className="mt-1 h-4 w-4 rounded border-line-200 text-accent-600 focus:ring-accent-500"
               />
               <div>
-                <span className="block text-sm font-semibold text-ink-950">
+                <span className="block text-sm font-semibold text-ink-950 dark:text-slate-100">
                   복습 우선 문제로 표시
                 </span>
-                <p className="mt-1 text-sm leading-6 text-ink-500">
+                <p className="mt-1 text-sm leading-6 text-ink-500 dark:text-slate-300">
                   다시 보고 싶은 문제거나, 나중에 퀴즈로 한 번 더 만나고 싶은
                   문제예요.
                 </p>
@@ -371,28 +371,28 @@ export default function ProblemForm({
         </div>
       </section>
 
-      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] sm:p-8">
+      <section className="rounded-[28px] border border-line-100 bg-white p-6 shadow-[0_20px_60px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900 dark:shadow-[0_20px_60px_rgba(0,0,0,0.35)] sm:p-8">
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Solution Record
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950">
+        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
           풀이 코드
         </h2>
-        <p className="mt-2 text-sm leading-6 text-ink-500">
+        <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           실제 코드도 함께 저장해두면 회상 결과와 구현 디테일을 나중에 비교하기
           쉬워집니다.
         </p>
 
         <div className="mt-6">
-          <label className="block text-sm font-semibold text-ink-700">코드</label>
+          <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">코드</label>
           <textarea
             rows={18}
             value={form.code}
             onChange={(e) => handleChange("code", e.target.value)}
             placeholder="풀이 코드를 입력하세요"
-            className="mt-2 min-h-80 w-full rounded-2xl border border-line-200 bg-ink-950 px-4 py-3 font-mono text-sm leading-7 text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-50"
-          />
-        </div>
+          className="mt-2 min-h-80 w-full rounded-2xl border border-line-200 bg-ink-950 px-4 py-3 font-mono text-sm leading-7 text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-950"
+        />
+      </div>
       </section>
 
       <div className="flex justify-end">
