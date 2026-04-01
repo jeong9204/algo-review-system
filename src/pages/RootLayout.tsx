@@ -149,7 +149,6 @@ export default function RootLayout() {
       setSystemTheme(event.matches ? "dark" : "light");
     };
 
-    setSystemTheme(mediaQuery.matches ? "dark" : "light");
     mediaQuery.addEventListener("change", handleSystemThemeChange);
 
     return () => {
@@ -238,7 +237,11 @@ export default function RootLayout() {
                     [
                       { value: "light", label: "Light", icon: <SunIcon /> },
                       { value: "dark", label: "Dark", icon: <MoonIcon /> },
-                      { value: "system", label: "System", icon: <MonitorIcon /> },
+                      {
+                        value: "system",
+                        label: "System",
+                        icon: <MonitorIcon />,
+                      },
                     ] as const
                   ).map((option) => {
                     const isActive = themeMode === option.value;
@@ -306,7 +309,8 @@ export default function RootLayout() {
                     Google로 로그인
                   </button>
                   <p className="text-sm text-ink-500 dark:text-slate-300 lg:text-right">
-                    로그인하면 복습 기록을 계정 기준으로 이어서 관리할 수 있어요.
+                    로그인하면 복습 기록을 계정 기준으로 이어서 관리할 수
+                    있어요.
                   </p>
                 </div>
               )}
