@@ -53,8 +53,9 @@ export interface ProblemFormValues {
 
 interface ProblemStore {
   problems: ProblemRecord[];
-  addProblem: (payload: ProblemFormValues) => void;
-  updateProblem: (id: string, payload: ProblemFormValues) => void;
+  setProblems: (problems: ProblemRecord[]) => void;
+  addProblem: (problem: ProblemRecord) => void;
+  updateProblem: (problem: ProblemRecord) => void;
   reviewProblem: (id: string, difficulty: ReviewDifficulty) => void;
   deleteProblem: (id: string) => void;
   getProblemById: (id: string) => ProblemRecord | undefined;
@@ -92,72 +93,64 @@ const normalizeList = (value: string[] | string) => {
     .filter(Boolean);
 };
 
+export const createProblemRecord = (
+  payload: ProblemFormValues,
+  currentProblem?: ProblemRecord,
+): ProblemRecord => {
+  const now = new Date().toISOString();
+
+  return {
+    id: currentProblem?.id ?? crypto.randomUUID(),
+    title: payload.title.trim(),
+    platform: payload.platform.trim(),
+    problemNumber: payload.problemNumber.trim(),
+    problemUrl: payload.problemUrl.trim(),
+    code: payload.code,
+    language: payload.language.trim(),
+    runtimes: normalizeList(payload.runtimes),
+    algorithms: normalizeList(payload.algorithms),
+    summary: payload.summary.trim(),
+    blockedReason: payload.blockedReason.trim(),
+    reviewHint: payload.reviewHint.trim(),
+    isPriorityReview: payload.isPriorityReview,
+    status: currentProblem?.status ?? "new",
+    reviewCount: currentProblem?.reviewCount ?? 0,
+    reviewHistory: currentProblem?.reviewHistory ?? [],
+    createdAt: currentProblem?.createdAt ?? now,
+    updatedAt: now,
+  };
+};
+
 export const useProblemStore = create<ProblemStore>((set, get) => ({
   problems: loadProblems(),
 
-  addProblem: (payload) => {
-    const now = new Date().toISOString();
+  setProblems: (problems) => {
+    saveProblems(problems);
+    set({ problems });
+  },
 
-    const newProblem: ProblemRecord = {
-      id: crypto.randomUUID(),
-      title: payload.title.trim(),
-      platform: payload.platform.trim(),
-      problemNumber: payload.problemNumber.trim(),
-      problemUrl: payload.problemUrl.trim(),
-
-      code: payload.code,
-      language: payload.language.trim(),
-      runtimes: normalizeList(payload.runtimes),
-
-      algorithms: normalizeList(payload.algorithms),
-      summary: payload.summary.trim(),
-      blockedReason: payload.blockedReason.trim(),
-      reviewHint: payload.reviewHint.trim(),
-      isPriorityReview: payload.isPriorityReview,
-
-      status: "new",
-      reviewCount: 0,
-      reviewHistory: [],
-
-      createdAt: now,
-      updatedAt: now,
-    };
-
+  addProblem: (problem) => {
     set((state) => {
-      const nextProblems = [newProblem, ...state.problems];
+      const dedupedProblems = state.problems.filter(
+        (item) => item.id !== problem.id,
+      );
+      const nextProblems = [problem, ...dedupedProblems];
       saveProblems(nextProblems);
       return { problems: nextProblems };
     });
   },
 
-  updateProblem: (id, payload) => {
+  updateProblem: (problem) => {
     set((state) => {
-      const nextProblems = state.problems.map((problem) => {
-        if (problem.id !== id) return problem;
+      const hasExistingProblem = state.problems.some(
+        (item) => item.id === problem.id,
+      );
+      const mergedProblems = hasExistingProblem
+        ? state.problems.map((item) => (item.id === problem.id ? problem : item))
+        : [problem, ...state.problems];
 
-        return {
-          ...problem,
-          title: payload.title.trim(),
-          platform: payload.platform.trim(),
-          problemNumber: payload.problemNumber.trim(),
-          problemUrl: payload.problemUrl.trim(),
-
-          code: payload.code,
-          language: payload.language.trim(),
-          runtimes: normalizeList(payload.runtimes),
-
-          algorithms: normalizeList(payload.algorithms),
-          summary: payload.summary.trim(),
-          blockedReason: payload.blockedReason.trim(),
-          reviewHint: payload.reviewHint.trim(),
-          isPriorityReview: payload.isPriorityReview,
-
-          updatedAt: new Date().toISOString(),
-        };
-      });
-
-      saveProblems(nextProblems);
-      return { problems: nextProblems };
+      saveProblems(mergedProblems);
+      return { problems: mergedProblems };
     });
   },
 

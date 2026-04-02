@@ -1,5 +1,5 @@
 import type { FormEvent } from "react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import type {
   ProblemFormValues,
   ProblemRecord,
@@ -8,7 +8,8 @@ import type {
 interface ProblemFormProps {
   initialValues?: Partial<ProblemRecord>;
   submitLabel: string;
-  onSubmit: (values: ProblemFormValues) => void;
+  isSubmitting?: boolean;
+  onSubmit: (values: ProblemFormValues) => void | Promise<void>;
 }
 
 const PLATFORM_OPTIONS = [
@@ -89,15 +90,19 @@ const createDefaultFormValues = (
 export default function ProblemForm({
   initialValues,
   submitLabel,
+  isSubmitting = false,
   onSubmit,
 }: ProblemFormProps) {
+  const defaultFormValues = createDefaultFormValues(initialValues);
   const [form, setForm] = useState<ProblemFormValues>(
-    createDefaultFormValues(initialValues),
+    defaultFormValues,
   );
-
-  useEffect(() => {
-    setForm(createDefaultFormValues(initialValues));
-  }, [initialValues]);
+  const [runtimeInput, setRuntimeInput] = useState(
+    defaultFormValues.runtimes.join(", "),
+  );
+  const [algorithmInput, setAlgorithmInput] = useState(
+    defaultFormValues.algorithms.join(", "),
+  );
 
   const handleChange = <K extends keyof ProblemFormValues>(
     key: K,
@@ -121,6 +126,10 @@ export default function ProblemForm({
         runtimes: shouldResetRuntime ? nextRuntimes : prev.runtimes,
       };
     });
+
+    if (platform === "baekjoon" && form.language === "javascript") {
+      setRuntimeInput("Node.js");
+    }
   };
 
   const handleLanguageChange = (language: string) => {
@@ -138,9 +147,13 @@ export default function ProblemForm({
         runtimes: shouldResetRuntime ? nextRuntimes : prev.runtimes,
       };
     });
+
+    if (form.platform === "baekjoon" && language === "javascript") {
+      setRuntimeInput("Node.js");
+    }
   };
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!form.title.trim()) {
@@ -153,7 +166,7 @@ export default function ProblemForm({
       return;
     }
 
-    onSubmit({
+    await onSubmit({
       ...form,
       runtimes: form.runtimes,
       algorithms: form.algorithms,
@@ -256,16 +269,18 @@ export default function ProblemForm({
           <div>
             <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">런타임</label>
             <input
-              value={form.runtimes.join(", ")}
-              onChange={(e) =>
+              value={runtimeInput}
+              onChange={(e) => {
+                const nextValue = e.target.value;
+                setRuntimeInput(nextValue);
                 handleChange(
                   "runtimes",
-                  e.target.value
+                  nextValue
                     .split(",")
                     .map((item) => item.trim())
                     .filter(Boolean),
-                )
-              }
+                );
+              }}
               placeholder="예: Node.js"
               className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
@@ -281,16 +296,18 @@ export default function ProblemForm({
               알고리즘 분류
             </label>
             <input
-              value={form.algorithms.join(", ")}
-              onChange={(e) =>
+              value={algorithmInput}
+              onChange={(e) => {
+                const nextValue = e.target.value;
+                setAlgorithmInput(nextValue);
                 handleChange(
                   "algorithms",
-                  e.target.value
+                  nextValue
                     .split(",")
                     .map((item) => item.trim())
                     .filter(Boolean),
-                )
-              }
+                );
+              }}
               placeholder="예: BFS, 그래프"
               className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:placeholder:text-slate-400 dark:focus:bg-slate-800"
             />
@@ -384,23 +401,26 @@ export default function ProblemForm({
         </p>
 
         <div className="mt-6">
-          <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">코드</label>
+          <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">
+            코드
+          </label>
           <textarea
             rows={18}
             value={form.code}
             onChange={(e) => handleChange("code", e.target.value)}
             placeholder="풀이 코드를 입력하세요"
-          className="mt-2 min-h-80 w-full rounded-2xl border border-line-200 bg-ink-950 px-4 py-3 font-mono text-sm leading-7 text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-950"
-        />
-      </div>
+            className="mt-2 min-h-80 w-full rounded-2xl border border-line-200 bg-ink-950 px-4 py-3 font-mono text-sm leading-7 text-slate-100 outline-none transition placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-950"
+          />
+        </div>
       </section>
 
       <div className="flex justify-end">
         <button
           type="submit"
-          className="rounded-2xl bg-ink-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-accent-600"
+          disabled={isSubmitting}
+          className="rounded-2xl bg-ink-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-accent-600 disabled:cursor-not-allowed disabled:bg-slate-400 dark:disabled:bg-slate-700"
         >
-          {submitLabel}
+          {isSubmitting ? "저장 중..." : submitLabel}
         </button>
       </div>
     </form>

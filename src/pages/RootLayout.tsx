@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import type { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
+import { collection, getDocs } from "firebase/firestore";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
-import { auth, signInWithGoogle, signOutUser } from "@/shared/config/firebase";
+import {
+  auth,
+  db,
+  signInWithGoogle,
+  signOutUser,
+} from "@/shared/config/firebase";
+import {
+  useProblemStore,
+  type ProblemRecord,
+} from "@/entities/problem/model/problemStore";
 
 const THEME_STORAGE_KEY = "algonote-theme";
 type ThemeMode = "light" | "dark" | "system";
@@ -138,6 +148,7 @@ export default function RootLayout() {
   const [systemTheme, setSystemTheme] = useState<"light" | "dark">(
     getSystemTheme,
   );
+  const setProblems = useProblemStore((state) => state.setProblems);
   const location = useLocation();
   const navigate = useNavigate();
   const resolvedTheme = themeMode === "system" ? systemTheme : themeMode;
@@ -169,6 +180,35 @@ export default function RootLayout() {
 
     return unsubscribe;
   }, []);
+
+  useEffect(() => {
+    if (isAuthLoading) {
+      return;
+    }
+
+    if (!user) {
+      setProblems([]);
+      return;
+    }
+
+    const syncProblemsFromFirestore = async () => {
+      try {
+        const snapshot = await getDocs(
+          collection(db, "users", user.uid, "problems"),
+        );
+
+        const problems = snapshot.docs
+          .map((docSnapshot) => docSnapshot.data() as ProblemRecord)
+          .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
+
+        setProblems(problems);
+      } catch (error) {
+        console.error("problems sync failed", error);
+      }
+    };
+
+    void syncProblemsFromFirestore();
+  }, [isAuthLoading, setProblems, user]);
 
   useEffect(() => {
     if (isAuthLoading) return;
