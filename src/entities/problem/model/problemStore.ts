@@ -63,11 +63,71 @@ interface ProblemStore {
 
 const STORAGE_KEY = "algonote-problems";
 
+function isTimestampLike(
+  value: unknown,
+): value is { toDate?: () => Date; seconds?: number } {
+  return typeof value === "object" && value !== null;
+}
+
+function normalizeDateValue(value: unknown, fallback: string) {
+  if (typeof value === "string") {
+    const parsed = new Date(value);
+    return Number.isNaN(parsed.getTime()) ? fallback : parsed.toISOString();
+  }
+
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? fallback : value.toISOString();
+  }
+
+  if (isTimestampLike(value) && typeof value.toDate === "function") {
+    const converted = value.toDate();
+    return Number.isNaN(converted.getTime()) ? fallback : converted.toISOString();
+  }
+
+  if (isTimestampLike(value) && typeof value.seconds === "number") {
+    return new Date(value.seconds * 1000).toISOString();
+  }
+
+  return fallback;
+}
+
+export function normalizeProblemRecord(problem: Partial<ProblemRecord>) {
+  const now = new Date().toISOString();
+  const createdAt = normalizeDateValue(problem.createdAt, now);
+  const updatedAt = normalizeDateValue(problem.updatedAt, createdAt);
+
+  return {
+    id: problem.id ?? crypto.randomUUID(),
+    title: problem.title ?? "",
+    platform: problem.platform ?? "",
+    problemNumber: problem.problemNumber ?? "",
+    problemUrl: problem.problemUrl ?? "",
+    code: problem.code ?? "",
+    language: problem.language ?? "",
+    runtimes: Array.isArray(problem.runtimes) ? problem.runtimes : [],
+    algorithms: Array.isArray(problem.algorithms) ? problem.algorithms : [],
+    summary: problem.summary ?? "",
+    blockedReason: problem.blockedReason ?? "",
+    reviewHint: problem.reviewHint ?? "",
+    isPriorityReview: Boolean(problem.isPriorityReview),
+    status: problem.status ?? "new",
+    reviewCount: problem.reviewCount ?? 0,
+    reviewHistory: Array.isArray(problem.reviewHistory) ? problem.reviewHistory : [],
+    createdAt,
+    updatedAt,
+  } satisfies ProblemRecord;
+}
+
 const loadProblems = (): ProblemRecord[] => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.map((problem) => normalizeProblemRecord(problem));
   } catch (error) {
     console.error("problems load failed", error);
     return [];
@@ -125,29 +185,38 @@ export const useProblemStore = create<ProblemStore>((set, get) => ({
   problems: loadProblems(),
 
   setProblems: (problems) => {
-    saveProblems(problems);
-    set({ problems });
+    const normalizedProblems = problems.map((problem) =>
+      normalizeProblemRecord(problem),
+    );
+    saveProblems(normalizedProblems);
+    set({ problems: normalizedProblems });
   },
 
   addProblem: (problem) => {
+    const normalizedProblem = normalizeProblemRecord(problem);
+
     set((state) => {
       const dedupedProblems = state.problems.filter(
-        (item) => item.id !== problem.id,
+        (item) => item.id !== normalizedProblem.id,
       );
-      const nextProblems = [problem, ...dedupedProblems];
+      const nextProblems = [normalizedProblem, ...dedupedProblems];
       saveProblems(nextProblems);
       return { problems: nextProblems };
     });
   },
 
   updateProblem: (problem) => {
+    const normalizedProblem = normalizeProblemRecord(problem);
+
     set((state) => {
       const hasExistingProblem = state.problems.some(
-        (item) => item.id === problem.id,
+        (item) => item.id === normalizedProblem.id,
       );
       const mergedProblems = hasExistingProblem
-        ? state.problems.map((item) => (item.id === problem.id ? problem : item))
-        : [problem, ...state.problems];
+        ? state.problems.map((item) =>
+            item.id === normalizedProblem.id ? normalizedProblem : item,
+          )
+        : [normalizedProblem, ...state.problems];
 
       saveProblems(mergedProblems);
       return { problems: mergedProblems };

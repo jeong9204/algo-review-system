@@ -10,6 +10,7 @@ import {
   signOutUser,
 } from "@/shared/config/firebase";
 import {
+  normalizeProblemRecord,
   useProblemStore,
   type ProblemRecord,
 } from "@/entities/problem/model/problemStore";
@@ -198,7 +199,9 @@ export default function RootLayout() {
         );
 
         const problems = snapshot.docs
-          .map((docSnapshot) => docSnapshot.data() as ProblemRecord)
+          .map((docSnapshot) =>
+            normalizeProblemRecord(docSnapshot.data() as ProblemRecord),
+          )
           .sort((left, right) => right.createdAt.localeCompare(left.createdAt));
 
         setProblems(problems);

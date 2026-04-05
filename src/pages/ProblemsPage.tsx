@@ -1,6 +1,20 @@
 import { Link } from "react-router-dom";
 import { useProblemStore } from "@/entities/problem/model/problemStore";
 
+function formatCreatedDate(value: string) {
+  const parsed = new Date(value);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return "날짜 미확인";
+  }
+
+  return parsed.toLocaleDateString("ko-KR", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+}
+
 function getLanguageLabel(language: string) {
   switch (language) {
     case "javascript":
@@ -30,23 +44,29 @@ export default function ProblemsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
-            Problems
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
-            문제 목록
-          </h1>
-        </div>
+      <section className="rounded-[32px] border border-line-100 bg-white px-6 py-7 text-ink-950 shadow-[0_24px_70px_rgba(15,23,42,0.08)] dark:border-slate-800 dark:bg-ink-950 dark:text-white dark:shadow-[0_24px_70px_rgba(2,6,23,0.38)] sm:px-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm font-medium tracking-[0.18em] text-accent-600 dark:text-teal-200 uppercase">
+              Problems
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-ink-950 dark:text-white sm:text-4xl">
+              문제 목록
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-ink-500 dark:text-slate-300">
+              지금까지 정리한 문제를 한눈에 보고, 등록일과 상태를 기준으로 복습
+              흐름을 이어가세요.
+            </p>
+          </div>
 
-        <Link
-          to="/add"
-          className="inline-flex rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-accent-600"
-        >
-          + 새 문제 등록
-        </Link>
-      </div>
+          <Link
+            to="/add"
+            className="inline-flex rounded-full bg-ink-950 px-5 py-3 text-sm font-semibold text-white transition hover:bg-accent-600 dark:bg-white dark:text-ink-950 dark:hover:bg-teal-50"
+          >
+            + 새 문제 등록
+          </Link>
+        </div>
+      </section>
 
       {problems.length === 0 ? (
         <div className="rounded-[28px] border border-dashed border-line-200 bg-white/70 p-10 text-center backdrop-blur dark:border-slate-700 dark:bg-slate-900/70">
@@ -79,6 +99,7 @@ export default function ProblemsPage() {
                     {record.runtimes.length > 0
                       ? ` · ${record.runtimes.map(getRuntimeLabel).join(", ")}`
                       : ""}
+                    {` · 등록일 ${formatCreatedDate(record.createdAt)}`}
                   </p>
                 </div>
 

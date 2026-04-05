@@ -26,6 +26,23 @@ function formatFullDate(date: Date) {
   });
 }
 
+function parseProblemActivityDate(value: string, fallback?: string) {
+  const parsed = new Date(value);
+
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed;
+  }
+
+  if (fallback) {
+    const fallbackDate = new Date(fallback);
+    if (!Number.isNaN(fallbackDate.getTime())) {
+      return fallbackDate;
+    }
+  }
+
+  return null;
+}
+
 function getHeatColor(count: number) {
   if (count === 0) return "bg-slate-100 dark:bg-slate-800";
   if (count === 1) return "bg-amber-200 dark:bg-amber-900/55";
@@ -50,9 +67,12 @@ export default function DashboardPage() {
 
   const countsByDate = problems.reduce<Record<string, number>>(
     (acc, problem) => {
-      const createdAt = new Date(problem.createdAt);
+      const createdAt = parseProblemActivityDate(
+        problem.createdAt,
+        problem.updatedAt,
+      );
 
-      if (Number.isNaN(createdAt.getTime())) {
+      if (!createdAt) {
         return acc;
       }
 
