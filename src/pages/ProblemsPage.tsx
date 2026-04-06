@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
-import { useProblemStore } from "@/entities/problem/model/problemStore";
+import {
+  useProblemStore,
+  type ProblemRecord,
+} from "@/entities/problem/model/problemStore";
 
 function formatCreatedDate(value: string) {
   const parsed = new Date(value);
@@ -37,6 +40,16 @@ function getRuntimeLabel(runtime: string) {
     default:
       return runtime;
   }
+}
+
+function getReviewStatusLabel(record: ProblemRecord) {
+  const latestDifficulty = record.reviewHistory[0]?.difficulty;
+
+  if (latestDifficulty === "easy") return "기억남";
+  if (latestDifficulty === "medium") return "애매함";
+  if (latestDifficulty === "hard") return "모르겠음";
+
+  return "미복습";
 }
 
 export default function ProblemsPage() {
@@ -104,7 +117,7 @@ export default function ProblemsPage() {
                 </div>
 
                 <div className="rounded-full bg-surface-50 px-4 py-2 text-sm font-medium text-ink-700 dark:bg-slate-800 dark:text-slate-200">
-                  상태: {record.status}
+                  상태: {getReviewStatusLabel(record)}
                 </div>
               </div>
 

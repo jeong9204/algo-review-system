@@ -181,6 +181,29 @@ export const createProblemRecord = (
   };
 };
 
+export const createReviewedProblem = (
+  problem: ProblemRecord,
+  difficulty: ReviewDifficulty,
+): ProblemRecord => {
+  const nextStatus: ProblemStatus =
+    difficulty === "easy" ? "mastered" : "review";
+
+  return {
+    ...problem,
+    status: nextStatus,
+    reviewCount: problem.reviewCount + 1,
+    reviewHistory: [
+      {
+        id: crypto.randomUUID(),
+        reviewedAt: new Date().toISOString(),
+        difficulty,
+      },
+      ...problem.reviewHistory,
+    ],
+    updatedAt: new Date().toISOString(),
+  };
+};
+
 export const useProblemStore = create<ProblemStore>((set, get) => ({
   problems: loadProblems(),
 

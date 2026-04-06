@@ -60,6 +60,8 @@ AlgoNote는 이 지점을 해결하기 위해 만들었습니다.
 - Vite 5
 - React Router DOM 7
 - Zustand
+- Firebase Auth
+- Cloud Firestore
 - Tailwind CSS 3
 - localStorage
 
@@ -114,6 +116,70 @@ src/
 - 헤더 중심 네비게이션으로 흐름 통일
 - 상세 페이지와 등록 페이지의 톤을 카드형 UI로 통일
 - 상태 기반 복습 흐름과 활동 기록 시각화 결합
+
+## 데이터 구조 메모
+
+추천 기능과 복습 통계를 나중에 확장하기 위해, Firestore에는 가능한 한 같은 형식으로 데이터를 쌓는 것을 목표로 합니다.
+
+### 1. Firestore 문서 스키마 초안
+
+- 사용자별 문제 저장 경로
+  `users/{uid}/problems/{problemId}`
+- 문제별 복습 이력 경로
+  `users/{uid}/problems/{problemId}/reviewHistory/{reviewId}`
+
+문제 문서에는 아래 같은 필드를 일관되게 유지하는 것이 좋습니다.
+
+- `platform`
+  `baekjoon | programmers | etc`
+- `language`
+  `javascript | typescript | python | java`
+- `algorithms`
+  문자열 하나가 아니라 `string[]`
+- `status`
+  `new | review | mastered`
+- `reviewCount`
+  총 복습 횟수
+- `lastReviewDifficulty`
+  `easy | medium | hard`
+- `lastReviewedAt`
+  마지막 복습 시각
+- `createdAt`, `updatedAt`
+  날짜 기준 필드
+
+### 2. 알고리즘 태그 정규화 규칙
+
+- 알고리즘 분류는 배열로 저장
+- 가능한 한 소문자 기준으로 통일
+- 공백 제거 후 저장
+- 동의어 표기는 하나로 고정
+  예: `bfs`, `dfs`, `graph`, `dp`, `greedy`
+- 화면 표시용 라벨은 저장값과 분리해서 나중에 매핑
+
+예시:
+
+```json
+["bfs", "graph"]
+```
+
+### 3. 추천용으로 미리 넣으면 좋은 필드
+
+- `algorithms`
+- `reviewCount`
+- `lastReviewDifficulty`
+- `lastReviewedAt`
+- `isPriorityReview`
+- `platform`
+- `problemNumber`
+
+이 필드들이 쌓이면 나중에 다음과 같은 추천으로 확장하기 좋아집니다.
+
+- 같은 알고리즘 기반 복습 문제 추천
+- 오래 안 본 문제 추천
+- 최근에 `애매함 / 모르겠음`으로 남긴 문제 우선 추천
+- 전체 사용자 데이터 기반 통계 추천
+
+상세 설계 메모는 [docs/data-model.md](/Users/jeong-yeji/algo-review-system/docs/data-model.md)에서 이어서 볼 수 있습니다.
 
 ## 앞으로 확장해볼 수 있는 방향
 
