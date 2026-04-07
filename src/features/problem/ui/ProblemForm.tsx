@@ -202,9 +202,14 @@ export default function ProblemForm({
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Problem Context
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
-          문제 기본 정보
-        </h2>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <h2 className="text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
+            문제 기본 정보
+          </h2>
+          <span className="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-500 dark:bg-rose-500/10 dark:text-rose-200">
+            필수 입력
+          </span>
+        </div>
         <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           나중에 다시 봤을 때 어떤 문제였는지 빠르게 떠올릴 수 있도록 기본
           맥락을 남겨주세요.
@@ -266,9 +271,14 @@ export default function ProblemForm({
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Recall Material
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
-          회상에 필요한 단서
-        </h2>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <h2 className="text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
+            회상에 필요한 단서
+          </h2>
+          <span className="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-500 dark:bg-rose-500/10 dark:text-rose-200">
+            필수 입력
+          </span>
+        </div>
         <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           언어, 런타임, 알고리즘 분류와 함께 어떤 생각으로 풀었는지 복습 재료를
           남겨두세요.
@@ -419,9 +429,14 @@ export default function ProblemForm({
         <p className="text-sm font-medium tracking-[0.18em] text-accent-600 uppercase">
           Solution Record
         </p>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
-          풀이 코드
-        </h2>
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <h2 className="text-xl font-semibold tracking-tight text-ink-950 dark:text-slate-50">
+            풀이 코드
+          </h2>
+          <span className="rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-500 dark:bg-rose-500/10 dark:text-rose-200">
+            필수 입력
+          </span>
+        </div>
         <p className="mt-2 text-sm leading-6 text-ink-500 dark:text-slate-300">
           실제 코드도 함께 저장해두면 회상 결과와 구현 디테일을 나중에 비교하기
           쉬워집니다.
