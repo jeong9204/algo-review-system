@@ -137,7 +137,7 @@ export default function ProblemDetailPage() {
             <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               핵심 아이디어
             </h2>
-            <p className="mt-3 text-sm leading-7 text-ink-700 dark:text-slate-300">
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-ink-700 dark:text-slate-300">
               {problem.summary || "아직 정리된 핵심 아이디어가 없어요."}
             </p>
           </section>
@@ -146,7 +146,7 @@ export default function ProblemDetailPage() {
             <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               막힌 포인트
             </h2>
-            <p className="mt-3 text-sm leading-7 text-ink-700 dark:text-slate-300">
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-ink-700 dark:text-slate-300">
               {problem.blockedReason || "기록된 막힘 포인트가 없어요."}
             </p>
           </section>
@@ -155,7 +155,7 @@ export default function ProblemDetailPage() {
             <h2 className="text-lg font-semibold tracking-tight text-ink-950 dark:text-slate-50">
               복습 힌트
             </h2>
-            <p className="mt-3 text-sm leading-7 text-ink-700 dark:text-slate-300">
+            <p className="mt-3 whitespace-pre-wrap text-sm leading-7 text-ink-700 dark:text-slate-300">
               {problem.reviewHint || "복습 힌트가 아직 없어요."}
             </p>
           </section>

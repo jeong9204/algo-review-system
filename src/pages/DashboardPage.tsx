@@ -5,17 +5,73 @@ const VISIBLE_WEEKS = 20;
 const CELL_SIZE = 16;
 const CELL_GAP = 4;
 const WEEK_WIDTH = CELL_SIZE + CELL_GAP;
+const DASHBOARD_TIME_ZONE = "Asia/Seoul";
+
+const dateKeyFormatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: DASHBOARD_TIME_ZONE,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+const datePartFormatter = new Intl.DateTimeFormat("en-CA", {
+  timeZone: DASHBOARD_TIME_ZONE,
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+});
+const weekdayFormatter = new Intl.DateTimeFormat("en-US", {
+  timeZone: DASHBOARD_TIME_ZONE,
+  weekday: "short",
+});
+const WEEKDAY_INDEX: Record<string, number> = {
+  Sun: 0,
+  Mon: 1,
+  Tue: 2,
+  Wed: 3,
+  Thu: 4,
+  Fri: 5,
+  Sat: 6,
+};
+
+function getZonedDateParts(date: Date) {
+  const parts = datePartFormatter.formatToParts(date);
+  const year = Number(parts.find((part) => part.type === "year")?.value ?? "0");
+  const month = Number(
+    parts.find((part) => part.type === "month")?.value ?? "1",
+  );
+  const day = Number(parts.find((part) => part.type === "day")?.value ?? "1");
+
+  return { year, month, day };
+}
+
+function createZonedDate(year: number, month: number, day: number) {
+  return new Date(Date.UTC(year, month - 1, day, 12));
+}
+
+function getTodayInDashboardTimeZone() {
+  const { year, month, day } = getZonedDateParts(new Date());
+  return createZonedDate(year, month, day);
+}
+
+function addDays(date: Date, days: number) {
+  const nextDate = new Date(date);
+  nextDate.setUTCDate(nextDate.getUTCDate() + days);
+  return nextDate;
+}
+
+function getWeekdayIndex(date: Date) {
+  return WEEKDAY_INDEX[weekdayFormatter.format(date)] ?? 0;
+}
 
 function toDateKey(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`;
+  return dateKeyFormatter.format(date);
 }
 
 function formatMonthLabel(date: Date) {
-  return date.toLocaleDateString("en-US", { month: "short" });
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    timeZone: DASHBOARD_TIME_ZONE,
+  });
 }
 
 function formatFullDate(date: Date) {
@@ -23,6 +79,7 @@ function formatFullDate(date: Date) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: DASHBOARD_TIME_ZONE,
   });
 }
 
@@ -83,22 +140,21 @@ export default function DashboardPage() {
     {},
   );
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const startDate = new Date(today);
-  startDate.setDate(today.getDate() - (VISIBLE_WEEKS * 7 - 1));
-  startDate.setDate(startDate.getDate() - startDate.getDay());
+  const today = getTodayInDashboardTimeZone();
+  const currentWeekStart = addDays(today, -getWeekdayIndex(today));
+  const startDate = addDays(currentWeekStart, -((VISIBLE_WEEKS - 1) * 7));
 
   const totalDays = VISIBLE_WEEKS * 7;
   const calendarDays = Array.from({ length: totalDays }, (_, index) => {
-    const date = new Date(startDate);
-    date.setDate(startDate.getDate() + index);
+    const date = addDays(startDate, index);
+    const isFuture = date.getTime() > today.getTime();
+    const dateKey = toDateKey(date);
 
     return {
       date,
-      key: toDateKey(date),
-      count: countsByDate[toDateKey(date)] ?? 0,
+      key: dateKey,
+      count: isFuture ? 0 : countsByDate[dateKey] ?? 0,
+      isFuture,
     };
   });
 
@@ -218,8 +274,16 @@ export default function DashboardPage() {
                     week.map((day) => (
                       <div
                         key={day.key}
-                        title={`${formatFullDate(day.date)} · ${day.count}개 등록`}
-                        className={`h-4 w-4 rounded-[4px] border border-white/60 dark:border-slate-950/60 ${getHeatColor(day.count)}`}
+                        title={
+                          day.isFuture
+                            ? `${formatFullDate(day.date)} · 아직 지나지 않은 날짜`
+                            : `${formatFullDate(day.date)} · ${day.count}개 등록`
+                        }
+                        className={`h-4 w-4 rounded-[4px] border border-white/60 dark:border-slate-950/60 ${
+                          day.isFuture
+                            ? "bg-slate-50/80 dark:bg-slate-900/80"
+                            : getHeatColor(day.count)
+                        }`}
                       />
                     )),
                   )}

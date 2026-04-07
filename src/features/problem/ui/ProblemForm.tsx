@@ -161,6 +161,26 @@ export default function ProblemForm({
       return;
     }
 
+    if (!form.problemNumber.trim()) {
+      alert("문제 번호를 입력해주세요.");
+      return;
+    }
+
+    if (!form.problemUrl.trim()) {
+      alert("문제 링크를 입력해주세요.");
+      return;
+    }
+
+    if (!runtimeInput.trim() || form.runtimes.length === 0) {
+      alert("런타임을 입력해주세요.");
+      return;
+    }
+
+    if (!algorithmInput.trim() || form.algorithms.length === 0) {
+      alert("알고리즘 분류를 입력해주세요.");
+      return;
+    }
+
     if (!form.code.trim()) {
       alert("코드를 입력해주세요.");
       return;
@@ -193,6 +213,7 @@ export default function ProblemForm({
         <div className="mt-6">
           <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">문제 제목</label>
           <input
+            required
             value={form.title}
             onChange={(e) => handleChange("title", e.target.value)}
             placeholder="예: DFS와 BFS"
@@ -204,6 +225,7 @@ export default function ProblemForm({
           <div>
             <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">플랫폼</label>
             <select
+              required
               value={form.platform}
               onChange={(e) => handlePlatformChange(e.target.value)}
               className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:bg-slate-800"
@@ -219,6 +241,7 @@ export default function ProblemForm({
           <div>
             <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">문제 번호</label>
             <input
+              required
               value={form.problemNumber}
               onChange={(e) => handleChange("problemNumber", e.target.value)}
               placeholder="예: 1260"
@@ -229,6 +252,7 @@ export default function ProblemForm({
           <div>
             <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">문제 링크</label>
             <input
+              required
               value={form.problemUrl}
               onChange={(e) => handleChange("problemUrl", e.target.value)}
               placeholder="https://..."
@@ -254,6 +278,7 @@ export default function ProblemForm({
           <div>
             <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">언어</label>
             <select
+              required
               value={form.language}
               onChange={(e) => handleLanguageChange(e.target.value)}
               className="mt-2 w-full rounded-2xl border border-line-200 bg-surface-50 px-4 py-3 text-[15px] outline-none transition placeholder:text-ink-500 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:focus:bg-slate-800"
@@ -269,6 +294,7 @@ export default function ProblemForm({
           <div>
             <label className="block text-sm font-semibold text-ink-700 dark:text-slate-200">런타임</label>
             <input
+              required
               value={runtimeInput}
               onChange={(e) => {
                 const nextValue = e.target.value;
@@ -296,6 +322,7 @@ export default function ProblemForm({
               알고리즘 분류
             </label>
             <input
+              required
               value={algorithmInput}
               onChange={(e) => {
                 const nextValue = e.target.value;
@@ -405,6 +432,7 @@ export default function ProblemForm({
             코드
           </label>
           <textarea
+            required
             rows={18}
             value={form.code}
             onChange={(e) => handleChange("code", e.target.value)}
